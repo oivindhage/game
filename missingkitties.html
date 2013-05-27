@@ -8,42 +8,16 @@
 	<script type="text/javascript" src="akihabara/help.js"></script>
 	<script type="text/javascript" src="akihabara/tool.js"></script>
 	<script type="text/javascript" src="akihabara/gamecycle.js"></script>
+	<script type="text/javascript" src="gameLoadResources.js"></script>
+	<script type="text/javascript" src="powerups.js"></script>
+	<script type="text/javascript" src="enemies.js"></script>
+	<script type="text/javascript" src="hero.js"></script>
+	<script type="text/javascript" src="helpers.js"></script>
 	<style>BODY { -webkit-user-select:none; margin:0px}</style>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 </head>
 <body>
 <script>
-var maingame; // The magic object that handles the full play cycle
-var maze; // The maze array, with pills and walls
-// First of all, let's load all the needed resources. Is done on the "onLoad" event of the window.
-gbox.onLoad(function () {
-	help.akihabaraInit({ 
-	}); 
-
-	gbox.addImage("logo","resources/graphics/logo.png"); // Images are loaded setting an alias and a file name. 
-	gbox.addImage("cels","resources/graphics/cels.png"); // or sprites sheet, like this one...
-	gbox.addImage("font","resources/graphics/font.png"); // ...or font set.
-	
-	gbox.addFont({id:"small",image:"font",firstletter:" ",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:0});
-	
-	gbox.addTiles({id:"hero",image:"cels",tileh:12,tilew:12,tilerow:11,gapx:0,gapy:0});
-	gbox.addTiles({id:"blinky",image:"cels",tileh:9,tilew:12,tilerow:2,gapx:0,gapy:15});
-	gbox.addTiles({id:"ghost1",image:"cels",tileh:12,tilew:12,tilerow:3,gapx:0,gapy:12});
-	gbox.addTiles({id:"bonus",image:"cels",tileh:12,tilew:12,tilerow:8,gapx:0,gapy:24}); 
-	gbox.addTiles({id:"maze",image:"cels",tileh:16,tilew:16,tilerow:10,gapx:0,gapy:36}); 
-	
-	var audioserver="resources/audio/"; 
-	gbox.addAudio("eat",[audioserver+"eat.mp3",audioserver+"eat.ogg"],{channel:"sfx"}); 
-	gbox.addAudio("eatghost",[audioserver+"laser.mp3",audioserver+"laser.ogg"],{channel:"sfx"});
-	gbox.addAudio("powerpill",[audioserver+"powerup3.mp3",audioserver+"powerup3.ogg"],{channel:"sfx"});
-	gbox.addAudio("die",[audioserver+"die.mp3",audioserver+"die.ogg"],{channel:"sfx"});
-	gbox.addAudio("bonus",[audioserver+"coin.mp3",audioserver+"coin.ogg"],{channel:"sfx"});
-	gbox.addAudio("default-menu-option",[audioserver+"select.mp3",audioserver+"select.ogg"],{channel:"sfx"});
-	gbox.addAudio("default-menu-confirm",[audioserver+"start.mp3",audioserver+"start.ogg"],{channel:"sfx"});
-	gbox.addAudio("ingame",[audioserver+"ingame.mp3",audioserver+"ingame.ogg"],{channel:"bgmusic",loop:true}); 
-	gbox.addAudio("intro",[audioserver+"Intro.mp3",audioserver+"Intro.ogg"],{channel:"bgmusic",loop:true}); 
-	gbox.loadAll(go); // When everything is ready, the "loadAll" downloads all the needed resources and runs the "go" function when it's done loading.
-}, false);
 
 function go() {
  	gbox.setGroups(["background","weapon","player","ghosts","bonus","sparks","gamecycle"]); 
@@ -146,14 +120,14 @@ function go() {
 	gbox.blitTilemap(gbox.getCanvasContext("mazecanvas"),maze);				
 	this.newLife(); 
 }
-		  
+
 // This event is triggered every time the player "reborn". 
 maingame.newLife=function(up) {
 	//gbox.trashGroup("ghosts");
 	gbox.purgeGarbage(); // the gbox module have a garbage collector that runs sometime.call this manually for optimization and better reinitialization
 	toys.platformer.spawn(gbox.getObject("player","hero"),{x:tileXPos(39),y:tileYPos(24),accx:0,accy:0,xpushing:false,ypushing:false}); 
 	//object into the "player" group spawns in the middle of the maze every time it spawns.
-	toys.platformer.spawn(gbox.getObject("bonus", "sword"));
+	
 	// maingame.addGhost({id:4,x:maze.hw+14,y:maze.hh-17});
 	gbox.playAudio("ingame"); // Start playing the ingame music. Notes that the "maingame" object will fade in/out and stop the "bgmusic" channel when the screen will fade automatically. We just need to play the music when the screen is fading to fade the music too!
 }
@@ -161,16 +135,14 @@ maingame.newLife=function(up) {
 // This method is called before starting the game, after the startup menu. Everything vital is done here, once per play.
 maingame.initializeGame=function() {
 	// Maingame gives an "hud" object that is rendered over everything.
-	maingame.hud.setWidget("label",{widget:"label",font:"small",value:"1UP",dx:240,dy:10,clear:true}); 
-	maingame.hud.setWidget("score",{widget:"label",font:"small",value:0,dx:240,dy:25,clear:true}); // A score counter.
-	maingame.hud.setWidget("label",{widget:"label",font:"small",value:"HI",dx:240,dy:40,clear:true}); // The "HI" label.
-	maingame.hud.setWidget("hiscore",{widget:"label",font:"small",value:0,dx:240,dy:55,clear:true}); // The hiscore counter.
+	//maingame.hud.setWidget("label",{widget:"label",font:"small",value:"1UP",dx:240,dy:10,clear:true}); 
+	//maingame.hud.setWidget("score",{widget:"label",font:"small",value:0,dx:240,dy:25,clear:true}); // A score counter.
+	//maingame.hud.setWidget("label",{widget:"label",font:"small",value:"HI",dx:240,dy:40,clear:true}); // The "HI" label.
+	//maingame.hud.setWidget("hiscore",{widget:"label",font:"small",value:0,dx:240,dy:55,clear:true}); // The hiscore counter.
 	maingame.hud.setWidget("lives",{widget:"symbols",minvalue:0,value:3-maingame.difficulty,maxshown:3,tileset:"hero",tiles:[5],dx:240,dy:70,gapx:16,gapy:0});
 	maingame.hud.setWidget("bonus",{widget:"stack",rightalign:true,tileset:"bonus",dx:gbox.getScreenW()-5,dy:gbox.getScreenH()-34,gapx:12,gapy:0,maxshown:8,value:[]}); // The bonus queue: is the "history" of the picked up bonuses, on the lower right corner, aligned to the right. Starts with an empty array. gapx and gapy is the distance between symbols
 	maingame.hud.setWidget("stage",{widget:"label",font:"small",value:"",dx:0,dw:gbox.getScreenW()-5,dy:gbox.getScreenH()-13,halign:gbox.ALIGN_RIGHT,clear:true}); // The label with the stage name (low creativity: STAGE 1, STAGE 2 etc). Is empty for now, will be filled when a new level starts.
 	
-	maingame.hud.setValue("hiscore","value",gbox.dataLoad("capman-hiscore")); // setValue is used to set parametes on hud. So, well, we're setting the "hiscore value" to the loaded data "hiscore" that contains the latest hiscore.
-
 	// An object will draw the maze on the screen
 	gbox.addObject({
 		id:"bg", // This is the object ID
@@ -183,386 +155,22 @@ maingame.initializeGame=function() {
 			gbox.blit(gbox.getBufferContext(),gbox.getCanvas("mazecanvas"),{dx:0,dy:0,dw:gbox.getCanvas("mazecanvas").width,dh:gbox.getCanvas("mazecanvas").height,sourcecamera:true}); // Simply draw the maze on the screen.
 		}
 	});
-	gbox.addObject({
-		id:"hero",
-		group:"player",
-		tileset:"hero",
-		killed:false, 
-		
-		initialize:function() { // The "initialize" method is called the first frame the object spawns and never more.
-			toys.platformer.initialize(this, {
-					frames:{
-						still:{ speed:1, frames:[0] },
-						walking:{ speed:2, frames:[1,2,3] },
-						jumping:{ speed:1, frames:[4] },
-						falling:{ speed:1, frames:[5] },
-						die:{speed:1,frames:[6] }
-					},
-					responsive:14,
-					accx:0,
-					fliph:toys.FACE_LEFT,
-					weapon:"none"
 
-			});
-		},
-		
-		first:function() { // Usually everyting involving interacton is into the "first" method.
-			this.counter=(this.counter+1)%10; // This line must be used in every object that uses animation. Is needed for getting the right frame (the "frames" block few lines up)
-			
-			if (!this.killed&&!maingame.gameIsHold()&&!maingame.bullettimer) { // If hero is still alive and the game is not "hold" (level changing fadein/fadeouts etc.) and the "bullet timer" is not stopping the game.
-			
-				// First of all, let's move.
-				var olddata=help.createModel(this,["x","y","accx","accy","xpushing","ypushing","facing"]); // A little trick: hero cannot change direction, if hits a wall, so we backup hero's status here. Will restored if hero hits the wall.
-
-		  		// Counter
-		  		this.counter=(this.counter+1)%10;
-				if (!this.killed) {
-					
-					toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
-					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping
-					toys.platformer.attackKeys(this, {attack:"b"});//attack
-					//toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Swing sword with x",keep:150});
-
-					toys.platformer.setSide(this); // set horizontal side
-					toys.platformer.setFrame(this); // set the right animation frame
-					toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-					toys.platformer.handleAccellerations(this); // gravity/attrito
-					toys.platformer.verticalTileCollision(this,maze,"map"); // vertical tile collision (i.e. floor)
-					toys.platformer.horizontalTileCollision(this,maze,"map"); // horizontal tile collision (i.e. walls)
-					this.checkDangerourFloorOrCeiling(maze, "map");
-					if (this.accx>0){
-						this.fliph=0;
-					}else if(this.accx<0){
-						this.fliph=1;
-					}
-					
-					followCamera(this, {w:maze.w,h:maze.h});
-				}
-				toys.platformer.setFrame(this); // setFrame sets the right frame checking the facing and the defined animations in "initialize"
-			}
-
-		},
-
-		checkDangerourFloorOrCeiling:function(map,tilemap) {
-			var bottom1=help.getTileInMap(this.x+(this.w/2),this.y+this.h,map,0,tilemap);
-			var top=help.getTileInMap(this.x+(this.w/2),this.y,map,0,tilemap);
-			
-			if (map.tileIsDangerousCeil(top)) {
-				this.kill();
-			}
-			if (map.tileIsDangerousFloor(bottom1)) {
-				this.kill();
-			}
-		},
-		// The blit phase is the very last method called every frame. It should only draw the object on the bufferContext (i.e. the screen)
-		blit:function() {
-			if (!this.killed) 
-				gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x,dy:this.y,fliph:this.fliph,flipv:this.flipv,camera:this.camera,alpha:1});
-		},
-		
-		kill:function() {
-			if (!this.killed) { // If we're alive...
-				this.killed=true; // First of all, hero is killed. As you've seen, that makes hero invisible and on hold.
-				gbox.hitAudio("die"); // Play the die sound
-				maingame.hud.addValue("lives","value",-1); // Then decrease the lives count.
-				maingame.playerDied({wait:130}); // Telling the main game cycle that the player died. The arguments sets a short delay after the last fadeout, for making visible the dead animation
-				this.fliph=0;
-				toys.generate.sparks.simple(this,"sparks",null,{tileset:this.tileset,frames:{speed:12,frames:[5,6,7,8,9,10,10,10,10,10]}});
-				// And here comes a common trick: the player is still where was killed and a "spark" (i.e. unuseful animation) starts in the same place.
-				// This method allows many nice tricks, since avoid destruction/recreation of the player object, allow a respawn the player in the place it was killed very easily (switching
-				// the killed attribute. The "spark.simple" method spawns a spark in the same position of the object in the first argument.
-			}
-		}
-	});
-
-
- gbox.addObject({
-							group:"ghosts",
-							tileset:"blinky",
-							initialize:function() {
-								toys.platformer.initialize(this,{
-									frames:{
-										still:{ speed:1, frames:[0] },
-										walking:{ speed:4, frames:[0,1] },
-										jumping:{ speed:1, frames:[0] },
-										falling:{ speed:1, frames:[0] },
-										die: { speed:1,frames:[0] }
-									},
-									x:550,
-									y:320,
-									side:0
-									
-								});
-							},
-							first:function() {
-								if (gbox.objectIsVisible(this)) {
-									// Counter
-									this.counter=(this.counter+1)%10;
-
-									toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-									toys.platformer.auto.horizontalBounce(this,maze,"map"); // Bounces horizontally if hit the sideways walls
-									if (this.touchedfloor) // If touching the floor...
-										toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2}); // goomba movement
-									else // Else...
-										this.accx=0; // Stay still (i.e. jump only vertically)
-									toys.platformer.auto.dontFall(this,maze,"map"); // prevent from falling from current platform
-									toys.platformer.verticalTileCollision(this,maze,"map"); // vertical tile collision (i.e. floor)
-									toys.platformer.horizontalTileCollision(this,maze,"map"); // horizontal tile collision (i.e. walls)
-									//if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
-									toys.platformer.handleAccellerations(this); // gravity/attrito
-									toys.platformer.setFrame(this); // set the right animation frame
-									var pl=gbox.getObject("player","hero");
-									//if (typeof pl != 'undefined'){
-										if (gbox.collides(this,pl,2)){
-											pl.kill();
-										}
-									//}
-								}
-								
-							},
-							blit:function() {
-								this.xcam = this.x - gbox.getCamera().x;
-								this.ycam = this.y - gbox.getCamera().y;
-								if (gbox.objectIsVisible(this)){
-									gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x,dy:this.y,camera:this.camera,fliph:this.side,flipv:this.flipv});
-								}
-							}
-					  });
-
-	gbox.addObject({
-				id:"gun",
-				group:"bonus",
-				tileset:"bonus",
-				frame:1, 
-				initialize:function() {
-					toys.platformer.initialize(this,{
-									frames:{
-										still:{ speed:1, frames:[1] },
-										walking:{ speed:4, frames:[1] },
-										jumping:{ speed:1, frames:[1] },
-										falling:{ speed:1, frames:[1] },
-										die: { speed:1,frames:[1] }
-									},
-									x:tileXPos(8),
-									y:tileYPos(10),
-									xcam:tileXPos(8),
-									ycam:tileYPos(10),
-									jumpaccy:10,
-									side:1
-								});
-				},
-				first:function() {
-					if (gbox.objectIsVisible(this)){
-
-
-						toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-						toys.platformer.handleAccellerations(this); // gravity/attrito
-						toys.platformer.setFrame(this); // set the right animation frame
-						var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-						if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-							gbox.hitAudio("bonus"); // Play the bonus sound...
-							hero.weapon = "gun";
-							maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-							toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Shoot with x",keep:150}); // Our nice "text spark" with the earned score...
-							gbox.trashObject(this); // ...and self-destroy.
-						} 
-					}
-				},
-
-				blit:function() {
-					if (gbox.objectIsVisible(this)){
-							gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-						}
-					this.xcam = this.x - gbox.getCamera().x;
-					this.ycam = this.y - gbox.getCamera().y;
-				}
-			 });
-
-	gbox.addObject({
-				id:"sword",
-				group:"bonus",
-				tileset:"bonus",
-				frame:6, 
-				initialize:function() {
-					toys.platformer.initialize(this,{
-									frames:{
-										still:{ speed:1, frames:[6] },
-										walking:{ speed:4, frames:[6] },
-										jumping:{ speed:1, frames:[6] },
-										falling:{ speed:1, frames:[6] },
-										die: { speed:1,frames:[6] }
-									},
-									x:tileXPos(21) + 6,
-									y:tileYPos(22) + 6,
-									xcam:tileXPos(21) + 6,
-									ycam:tileYPos(22) + 6,
-									jumpaccy:10,
-									side:1
-								});
-				},
-				first:function() {
-					if (gbox.objectIsVisible(this)){
-
-
-						toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-						toys.platformer.handleAccellerations(this); // gravity/attrito
-						toys.platformer.setFrame(this); // set the right animation frame
-						var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-						if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-							gbox.hitAudio("bonus"); // Play the bonus sound...
-							hero.weapon = "sword";
-							maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-							toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Swing sword with x",keep:150}); // Our nice "text spark" with the earned score...
-							gbox.trashObject(this); // ...and self-destroy.
-						} 
-					}
-				},
-
-				blit:function() {
-					if (gbox.objectIsVisible(this)){
-							gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-						}
-					this.xcam = this.x - gbox.getCamera().x;
-					this.ycam = this.y - gbox.getCamera().y;
-				}
-			 });
-
-gbox.addObject({
-				id:"shoe",
-				group:"bonus",
-				tileset:"bonus",
-				frame:3, 
-				initialize:function() {
-					toys.platformer.initialize(this,{
-									frames:{
-										still:{ speed:1, frames:[2] },
-										walking:{ speed:4, frames:[2] },
-										jumping:{ speed:1, frames:[2] },
-										falling:{ speed:1, frames:[2] },
-										die: { speed:1,frames:[2] }
-									},
-									x:tileXPos(124),
-									y:tileYPos(36),
-									xcam:tileXPos(124),
-									ycam:tileYPos(36),
-									jumpaccy:0,
-									side:1
-								});
-				},
-				first:function() {
-					if (gbox.objectIsVisible(this)){
-
-
-						toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-						toys.platformer.handleAccellerations(this); // gravity/attrito
-						toys.platformer.setFrame(this); // set the right animation frame
-						var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-						if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-							gbox.hitAudio("bonus"); // Play the bonus sound...
-							maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-							toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"shoot with X",keep:20}); // Our nice "text spark" with the earned score...
-							gbox.trashObject(this); // ...and self-destroy.
-							hero.jumpaccy = 8;
-						} 
-					}
-				},
-
-				blit:function() {
-					if (gbox.objectIsVisible(this)){
-							gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-						}
-					this.xcam = this.x - gbox.getCamera().x;
-					this.ycam = this.y - gbox.getCamera().y;
-				}
-			 });
-
-gbox.addObject({
-				id:"bluekey",
-				group:"bonus",
-				tileset:"bonus",
-				frame:4, 
-				initialize:function() {
-					toys.platformer.initialize(this,{
-									frames:{
-										still:{ speed:1, frames:[4] },
-										walking:{ speed:4, frames:[4] },
-										jumping:{ speed:1, frames:[4] },
-										falling:{ speed:1, frames:[4] },
-										die: { speed:1,frames:[4] }
-									},
-									x:tileXPos(134),
-									y:tileYPos(58),
-									xcam:tileXPos(134),
-									ycam:tileYPos(58),
-									jumpaccy:0,
-									side:1
-								});
-				},
-				first:function() {
-					if (gbox.objectIsVisible(this)){
-
-
-						toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-						toys.platformer.handleAccellerations(this); // gravity/attrito
-						toys.platformer.setFrame(this); // set the right animation frame
-						var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-						if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-							gbox.hitAudio("bonus"); // Play the bonus sound...
-							maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-							toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"shoot with X",keep:20}); // Our nice "text spark" with the earned score...
-							gbox.trashObject(this); // ...and self-destroy.
-							hero.jumpaccy = 8;
-						} 
-					}
-				},
-
-				blit:function() {
-					if (gbox.objectIsVisible(this)){
-							gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-						}
-					this.xcam = this.x - gbox.getCamera().x;
-					this.ycam = this.y - gbox.getCamera().y;
-				}
-			 });
-
-
-
-
+	addPowerups();
+	addEnemies();
+	addHero();
 }
 
 	 // Some final touch to the maingame object...
   maingame.gameIsOver=function() { // This method is called by maingame itself to check if the game is over or not. So...
   	var isGameover=maingame.hud.getValue("lives","value")==0; // the game is REALLY over when lives counter reaches the zero.
-  	if (isGameover) // Just in time, we can do something useful, since we're here. Like... checking if we have a new *CHAMPION*...
-  		if (maingame.hud.getNumberValue("score","value")>maingame.hud.getNumberValue("hiscore","value")) // If the player's score is higher the shown hiscore...
-  			gbox.dataSave("capman-hiscore",maingame.hud.getNumberValue("score","value")); // ... save the player's score as new hiscore. The next time we play "hero", the new hiscore to beat will be this one.
   	return isGameover; // Finally, returning if the game is ended or not.
   }
   
- // And now let's do something not related with ghosts, heros, pills and mazes. Usually random things and hidden countings happens during the gameplay, so...
+ // And now let's do something not related with ghosts, heros, pills and mazes. Usually random things and hidden countings happens during the gameplay
  maingame.gameEvents=function() { 
   }
-  
-//Returns the x-position of the left side of a tile column
-function tileXPos(x){
-	return (x-1) * 16;
-}
-
-//Returns the y-position of the top of a tile row
-function tileYPos(y){
-	return (y-1) * 16;
-}
  
-function followCamera(obj,viewdata) {
-	xbuf = 96;
-	ybuf = 96;
-	xcam = gbox.getCamera().x;
-	ycam = gbox.getCamera().y;
-	if ((obj.x - xcam) > (gbox._screenw - xbuf)) gbox.setCameraX(xcam + (obj.x - xcam) - (gbox._screenw - xbuf), viewdata);
-	if ((obj.x - xcam) < (xbuf))                 gbox.setCameraX(xcam + (obj.x - xcam) - xbuf,                   viewdata);
-	if ((obj.y - ycam) > (gbox._screenh - ybuf)) gbox.setCameraY(ycam + (obj.y - ycam) - (gbox._screenh - ybuf), viewdata);
-	if ((obj.y - ycam) < (ybuf))                 gbox.setCameraY(ycam + (obj.y - ycam) - ybuf,                   viewdata);
-}
 
   gbox.go();
 }
