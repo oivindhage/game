@@ -13,8 +13,7 @@ function addEnemies(){
 				},
 				x:550,
 				y:320,
-				side:0
-				
+				side:0				
 			});
 		},
 		first:function() {
@@ -41,8 +40,6 @@ function addEnemies(){
 			
 		},
 		blit:function() {
-			this.xcam = this.x - gbox.getCamera().x;
-			this.ycam = this.y - gbox.getCamera().y;
 			if (gbox.objectIsVisible(this)){
 				gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x,dy:this.y,camera:this.camera,fliph:this.side,flipv:this.flipv});
 			}

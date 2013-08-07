@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="enemies.js"></script>
 	<script type="text/javascript" src="hero.js"></script>
 	<script type="text/javascript" src="helpers.js"></script>
+	<script type="text/javascript" src="weapons.js"></script>
 	<style>BODY { -webkit-user-select:none; margin:0px}</style>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 </head>
@@ -20,7 +21,7 @@
 <script>
 
 function go() {
- 	gbox.setGroups(["background","weapon","player","ghosts","bonus","sparks","gamecycle"]); 
+ 	gbox.setGroups(["background","player","weapon","ghosts","bonus","sparks","gamecycle"]); 
  	gbox.setAudioChannels({bgmusic:{volume:0.8},sfx:{volume:1.0}});
  	maingame=gamecycle.createMaingame("gamecycle","gamecycle"); // a new maingame into the "gamecycle" group, "override" some maingame default actions.
  	
@@ -34,17 +35,17 @@ function go() {
 			"xxxxxxxxxxxxxxxxxxxxxx                                                                        xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxx              ##                                                        xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxx                                                                        xx                                       ",
-			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxx                                          xx                                       ",
-			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxxxx                                        xx                                       ",
-			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxxxxxx                                      xx                                       ",
+			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxss                                          xx                                       ",
+			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxxss                                        xx                                       ",
+			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxxxxss                                      xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxx                    xxxxxxxxxxxxxxss                                    xx                                       ",
-			"xx                  xx                    xxxxxxxxxxxxxxxxxx                                  xx                                       ",
-			"xx                  xx                    xxxxxxxxxxxxxxxxxxxx                                xx                                       ",   
-			"xx                  xx                    xxxxxxxxxxxxxxxxxxxxxx                              xx                                       ",
-			"xx     c            xx                    xxxxxxxxxxxxxxxxxxxxxxxx                            xx                                       ",
+			"xx                  xx                    xxxxxxxxxxxxxxxxss                                  xx                                       ",
+			"xx                  xx                    xxxxxxxxxxxxxxxxxxss                                xx                                       ",   
+			"xx                  xx                    xxxxxxxxxxxxxxxxxxxxss                              xx                                       ",
+			"xx     c            xx                    xxxxxxxxxxxxxxxxxxxxxxss                            xx                                       ",
 			"xx   ccccc          xx                    x                      x                            xx                                       ",
 			"xx   ccccc           #                    #                      #                            xx                                       ",
-			"xxxxxxxxxxxxxxxxxxxxxxzzzzzzzzzzzzzzzzzzzzxxxxxxxxxxxxxxxxxxxxxxxxxxxx##                      xx                                       ",
+			"xxxxxxxxxxxxxxxxxxxxxxzzzzzzzzzzzzzzzzzzzzxxxxxssssssssssxxxxxxxxxxxxx##                      xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                      xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx##                  xx                                       ",
 			"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      sss         xx                                       ",
@@ -134,11 +135,6 @@ maingame.newLife=function(up) {
 
 // This method is called before starting the game, after the startup menu. Everything vital is done here, once per play.
 maingame.initializeGame=function() {
-	// Maingame gives an "hud" object that is rendered over everything.
-	//maingame.hud.setWidget("label",{widget:"label",font:"small",value:"1UP",dx:240,dy:10,clear:true}); 
-	//maingame.hud.setWidget("score",{widget:"label",font:"small",value:0,dx:240,dy:25,clear:true}); // A score counter.
-	//maingame.hud.setWidget("label",{widget:"label",font:"small",value:"HI",dx:240,dy:40,clear:true}); // The "HI" label.
-	//maingame.hud.setWidget("hiscore",{widget:"label",font:"small",value:0,dx:240,dy:55,clear:true}); // The hiscore counter.
 	maingame.hud.setWidget("lives",{widget:"symbols",minvalue:0,value:3-maingame.difficulty,maxshown:3,tileset:"hero",tiles:[5],dx:240,dy:70,gapx:16,gapy:0});
 	maingame.hud.setWidget("bonus",{widget:"stack",rightalign:true,tileset:"bonus",dx:gbox.getScreenW()-5,dy:gbox.getScreenH()-34,gapx:12,gapy:0,maxshown:8,value:[]}); // The bonus queue: is the "history" of the picked up bonuses, on the lower right corner, aligned to the right. Starts with an empty array. gapx and gapy is the distance between symbols
 	maingame.hud.setWidget("stage",{widget:"label",font:"small",value:"",dx:0,dw:gbox.getScreenW()-5,dy:gbox.getScreenH()-13,halign:gbox.ALIGN_RIGHT,clear:true}); // The label with the stage name (low creativity: STAGE 1, STAGE 2 etc). Is empty for now, will be filled when a new level starts.
@@ -147,7 +143,7 @@ maingame.initializeGame=function() {
 	gbox.addObject({
 		id:"bg", // This is the object ID
 		group:"background", // Is in the "backround" group, that is the lower group in the "setGroups" list. Will be drawn for first.
-		initialize:function() { // This action is executed the first time the object is called, so...
+		initialize:function() {
 			gbox.setCameraY(2,{w:maze.w,h:maze.h}); // We place the camera a bit down, since the full maze doesn't fit the screen.
 		},
 		blit:function() { // Then, the most important action: the "blit", where object are drawn on the screen.
@@ -162,7 +158,7 @@ maingame.initializeGame=function() {
 }
 
 	 // Some final touch to the maingame object...
-  maingame.gameIsOver=function() { // This method is called by maingame itself to check if the game is over or not. So...
+	maingame.gameIsOver=function() { // This method is called by maingame itself to check if the game is over or not. So...
   	var isGameover=maingame.hud.getValue("lives","value")==0; // the game is REALLY over when lives counter reaches the zero.
   	return isGameover; // Finally, returning if the game is ended or not.
   }
@@ -171,6 +167,19 @@ maingame.initializeGame=function() {
  maingame.gameEvents=function() { 
   }
  
+toys.platformer.attackKeys = function(th, key){
+			if (gbox.keyIsHit(key.attack)){
+				var pl=gbox.getObject("player","hero");
+				if (pl.weapon == "none"){
+					toys.generate.sparks.popupText(th,"weapon",null,{font:"small",jump:5,text:"No weapon",keep:50});
+				} else if (pl.weapon == "sword"){
+					swingSword();
+				} else if (pl.weapon == "gun"){
+					toys.generate.sparks.popupText(th,"weapon",null,{font:"small",jump:5,text:"gun",keep:150});
+				}
+			}
+		}
+
 
   gbox.go();
 }

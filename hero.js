@@ -25,27 +25,21 @@ function addHero(){
 		first:function() { // Usually everyting involving interacton is into the "first" method.
 			this.counter=(this.counter+1)%10; // This line must be used in every object that uses animation. Is needed for getting the right frame (the "frames" block few lines up)
 			
-			if (!this.killed&&!maingame.gameIsHold()&&!maingame.bullettimer) { // If hero is still alive and the game is not "hold" (level changing fadein/fadeouts etc.) and the "bullet timer" is not stopping the game.
-			
-				// First of all, let's move.
+			if (!this.killed&&!maingame.gameIsHold()&&!maingame.bullettimer) {
 				var olddata=help.createModel(this,["x","y","accx","accy","xpushing","ypushing","facing"]); 
-
-		  		// Counter
 		  		this.counter=(this.counter+1)%10;
 				if (!this.killed) {
 					
 					toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
 					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping
-					toys.platformer.attackKeys(this, {attack:"b"});//attack
-					//toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Swing sword with x",keep:150});
-
-					toys.platformer.setSide(this); // set horizontal side
-					toys.platformer.setFrame(this); // set the right animation frame
-					toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-					toys.platformer.handleAccellerations(this); // gravity/attrito
+					toys.platformer.attackKeys(this, {attack:"b"});
+					toys.platformer.setSide(this); 
+					toys.platformer.setFrame(this); 
+					toys.platformer.applyGravity(this,maze,"map"); 
+					toys.platformer.handleAccellerations(this); 
 					toys.platformer.verticalTileCollision(this,maze,"map"); // vertical tile collision (i.e. floor)
 					toys.platformer.horizontalTileCollision(this,maze,"map"); // horizontal tile collision (i.e. walls)
-					this.checkDangerourFloorOrCeiling(maze, "map");
+					this.checkDangerousFloorOrCeiling(maze, "map");
 					if (this.accx>0){
 						this.fliph=0;
 					}else if(this.accx<0){
@@ -56,10 +50,9 @@ function addHero(){
 				}
 				toys.platformer.setFrame(this); // setFrame sets the right frame checking the facing and the defined animations in "initialize"
 			}
-
 		},
 
-		checkDangerourFloorOrCeiling:function(map,tilemap) {
+		checkDangerousFloorOrCeiling:function(map,tilemap) {
 			var bottom1=help.getTileInMap(this.x+(this.w/2),this.y+this.h,map,0,tilemap);
 			var top=help.getTileInMap(this.x+(this.w/2),this.y,map,0,tilemap);
 			

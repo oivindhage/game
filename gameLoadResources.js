@@ -1,7 +1,5 @@
 var maingame; // The magic object that handles the full play cycle
-var maze; // The maze array, with pills and walls
-// First of all, let's load all the needed resources. Is done on the "onLoad" event of the window.
-
+var maze; // The maze array
 
 gbox.onLoad(function () {
 	help.akihabaraInit({ 
@@ -18,6 +16,8 @@ gbox.onLoad(function () {
 	gbox.addTiles({id:"ghost1",image:"cels",tileh:12,tilew:12,tilerow:3,gapx:0,gapy:12});
 	gbox.addTiles({id:"bonus",image:"cels",tileh:12,tilew:12,tilerow:8,gapx:0,gapy:24}); 
 	gbox.addTiles({id:"maze",image:"cels",tileh:16,tilew:16,tilerow:10,gapx:0,gapy:36}); 
+	gbox.addTiles({id:"sword",image:"cels",tileh:12,tilew:12,tilerow:2,gapx:0,gapy:52}); 
+	gbox.addTiles({id:"swing",image:"cels",tileh:9,tilew:12,tilerow:2,gapx:0,gapy:52}); 
 	
 	var audioserver="resources/audio/"; 
 	gbox.addAudio("eat",[audioserver+"eat.mp3",audioserver+"eat.ogg"],{channel:"sfx"}); 
