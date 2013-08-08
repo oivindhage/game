@@ -9,35 +9,49 @@ function addEnemies(){
 					walking:{ speed:4, frames:[0,1] },
 					jumping:{ speed:1, frames:[0] },
 					falling:{ speed:1, frames:[0] },
-					die: { speed:1,frames:[0] }
+					attacked: { speed:1,frames:[2,3] }
 				},
 				x:550,
 				y:320,
-				side:0				
+				side:0,
+				life:2,
+				attackedTimer:0
 			});
 		},
 		first:function() {
 			if (gbox.objectIsVisible(this)) {
-				// Counter
 				this.counter=(this.counter+1)%10;
-
-				toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-				toys.platformer.auto.horizontalBounce(this,maze,"map"); // Bounces horizontally if hit the sideways walls
-				if (this.touchedfloor) // If touching the floor...
-					toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2}); // goomba movement
-				else // Else...
-					this.accx=0; // Stay still (i.e. jump only vertically)
-				toys.platformer.auto.dontFall(this,maze,"map"); // prevent from falling from current platform
-				toys.platformer.verticalTileCollision(this,maze,"map"); // vertical tile collision (i.e. floor)
-				toys.platformer.horizontalTileCollision(this,maze,"map"); // horizontal tile collision (i.e. walls)
-				toys.platformer.handleAccellerations(this); // gravity/attrito
-				toys.platformer.setFrame(this); // set the right animation frame
+				toys.platformer.applyGravity(this,maze,"map");
+				toys.platformer.auto.horizontalBounce(this,maze,"map"); 
+				if (this.touchedfloor){
+					toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2});
+				}
+				else {
+					this.accx=0;
+				}
+				toys.platformer.auto.dontFall(this,maze,"map");
+				toys.platformer.verticalTileCollision(this,maze,"map");
+				toys.platformer.horizontalTileCollision(this,maze,"map"); 
+				toys.platformer.handleAccellerations(this);
+				toys.platformer.setFrame(this);
 				var pl=gbox.getObject("player","hero");
 				if (gbox.collides(this,pl,2)){
 					pl.kill();
 				}
+				if (this.attackedTimer > 0){
+					--this.attackedTimer;
+				}else{
+					var weapon = gbox.getObject("weapon", "weapon");
+					if (weapon != undefined && gbox.collides(this, weapon, 2)){
+						--this.life;
+						this.attackedTimer = 30;
+						if (this.life<=0){
+							gbox.hitAudio("bonus");
+							gbox.trashObject(this);
+						}
+					}
+				}
 			}
-			
 		},
 		blit:function() {
 			if (gbox.objectIsVisible(this)){

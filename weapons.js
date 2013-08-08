@@ -1,6 +1,6 @@
 function swingSword(){
 	gbox.addObject({
-		id:"sword2",
+		id:"weapon",
 		group:"weapon",
 		tileset:"swing",
 		frame:0, 
