@@ -91,10 +91,19 @@ gbox.addObject({
 								still:{ speed:1, frames:[1] },
 								falling:{ speed:1, frames:[1] },
 							},
-							x:tileXPos(8),
-							y:tileYPos(10),
-							xcam:tileXPos(8),
-							ycam:tileYPos(10),
+							// x:tileXPos(8),
+							// y:tileYPos(10),
+							// xcam:tileXPos(8),
+							// ycam:tileYPos(10),
+							
+							
+							x:tileXPos(25) + 6,
+							y:tileYPos(22) + 6,
+							xcam:tileXPos(25) + 6,
+							ycam:tileYPos(22) + 6,
+							
+							
+							
 							jumpaccy:10,
 							side:1
 						});

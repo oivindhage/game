@@ -167,9 +167,7 @@ maingame.initializeGame=function() {
 toys.platformer.attackKeys = function(th, key){
 			if (gbox.keyIsHit(key.attack)){
 				var pl=gbox.getObject("player","hero");
-				if (pl.weapon == "none"){
-					toys.generate.sparks.popupText(th,"weapon",null,{font:"small",jump:5,text:"No weapon",keep:50});
-				} else if (pl.weapon == "sword"){
+				if (pl.weapon == "sword"){
 					swingSword();
 				} else if (pl.weapon == "gun"){
 					fireGun();
