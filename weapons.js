@@ -44,12 +44,18 @@ function fireGun(){
 		tileset:"shot",
 		frame:0, 
 		initialize:function() {
+			var pl=gbox.getObject("player","hero");
+			var theDiff = -10;
+			if (pl.fliph == 0){
+				theDiff = 10;
+			}
 			toys.platformer.initialize(this,{
 							frames:{
 								jumping:{ speed:1, frames:[0] },
 							},
 							x:tileXPos(21) + 6,
-							y:tileYPos(22) + 6
+							y:pl.y,
+							diff:theDiff,
 						});
 		},
 		first:function() {
@@ -57,7 +63,7 @@ function fireGun(){
 			if (gbox.objectIsVisible(this)){
 				toys.platformer.setFrame(this);
 			}
-			if (this.counter==8){
+			if (this.counter>=8){
 				gbox.trashObject(this);
 			}
 		},
