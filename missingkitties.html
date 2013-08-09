@@ -127,10 +127,7 @@ maingame.newLife=function(up) {
 	//gbox.trashGroup("ghosts");
 	gbox.purgeGarbage(); // the gbox module have a garbage collector that runs sometime.call this manually for optimization and better reinitialization
 	toys.platformer.spawn(gbox.getObject("player","hero"),{x:tileXPos(39),y:tileYPos(24),accx:0,accy:0,xpushing:false,ypushing:false}); 
-	//object into the "player" group spawns in the middle of the maze every time it spawns.
-	
-	// maingame.addGhost({id:4,x:maze.hw+14,y:maze.hh-17});
-	gbox.playAudio("ingame"); // Start playing the ingame music. Notes that the "maingame" object will fade in/out and stop the "bgmusic" channel when the screen will fade automatically. We just need to play the music when the screen is fading to fade the music too!
+	gbox.playAudio("ingame"); 
 }
 
 // This method is called before starting the game, after the startup menu. Everything vital is done here, once per play.
@@ -152,9 +149,9 @@ maingame.initializeGame=function() {
 		}
 	});
 
+	addHero();
 	addPowerups();
 	addEnemies();
-	addHero();
 }
 
 	 // Some final touch to the maingame object...

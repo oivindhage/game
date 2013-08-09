@@ -344,7 +344,6 @@ var toys={
 				th.fliph=(th.facing==toys.FACE_RIGHT);
 			th.frame=help.decideFrame(th.counter,th.frames[pref+toys.FACES[th.facing]]);
 		},
-		
 		/**
 		* Checks if the specified object is colliding with tiles in the map in an area defined by the object's colw and colh variables as well as the tolerance and approximation variables that are passed in through data. Only tiles in the map marked as solid are checked against. The alogrithm checks the 
 		* @param {Object} th The object that is being checked against the tilemap.

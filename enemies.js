@@ -13,6 +13,8 @@ function addEnemies(){
 				},
 				x:550,
 				y:320,
+				xcam:550,
+				ycam:320,
 				side:0,
 				life:2,
 				attackedTimer:0
@@ -39,8 +41,10 @@ function addEnemies(){
 					pl.kill();
 				}
 				if (this.attackedTimer > 0){
+					this.frames.walking.frames = [2,3];
 					--this.attackedTimer;
 				}else{
+					this.frames.walking.frames = [0,1];
 					var weapon = gbox.getObject("weapon", "weapon");
 					if (weapon != undefined && gbox.collides(this, weapon, 2)){
 						--this.life;
@@ -57,6 +61,8 @@ function addEnemies(){
 			if (gbox.objectIsVisible(this)){
 				gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x,dy:this.y,camera:this.camera,fliph:this.side,flipv:this.flipv});
 			}
+			this.xcam = this.x - gbox.getCamera().x;
+			this.ycam = this.y - gbox.getCamera().y;
 		}
 	});
 }

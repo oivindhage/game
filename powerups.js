@@ -8,10 +8,7 @@ function addPowerups(){
 			toys.platformer.initialize(this,{
 							frames:{
 								still:{ speed:1, frames:[6] },
-								walking:{ speed:4, frames:[6] },
-								jumping:{ speed:1, frames:[6] },
 								falling:{ speed:1, frames:[6] },
-								die: { speed:1,frames:[6] }
 							},
 							x:tileXPos(21) + 6,
 							y:tileYPos(22) + 6,
@@ -22,27 +19,10 @@ function addPowerups(){
 						});
 		},
 		first:function() {
-			if (gbox.objectIsVisible(this)){
-				toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-				toys.platformer.handleAccellerations(this); // gravity/attrito
-				toys.platformer.setFrame(this); // set the right animation frame
-				var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-				if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-					gbox.hitAudio("bonus"); // Play the bonus sound...
-					hero.weapon = "sword";
-					maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-					toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Swing sword with x",keep:150}); // Our nice "text spark" with the earned score...
-					gbox.trashObject(this); // ...and self-destroy.
-				} 
-			}
+			handleBonusObject(this, "sword");
 		},
-
 		blit:function() {
-			if (gbox.objectIsVisible(this)){
-					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-				}
-			this.xcam = this.x - gbox.getCamera().x;
-			this.ycam = this.y - gbox.getCamera().y;
+			blitBonusObject(this);
 		}
 	 });
 
@@ -55,10 +35,7 @@ gbox.addObject({
 			toys.platformer.initialize(this,{
 							frames:{
 								still:{ speed:1, frames:[4] },
-								walking:{ speed:4, frames:[4] },
-								jumping:{ speed:1, frames:[4] },
 								falling:{ speed:1, frames:[4] },
-								die: { speed:1,frames:[4] }
 							},
 							x:tileXPos(134),
 							y:tileYPos(58),
@@ -69,30 +46,12 @@ gbox.addObject({
 						});
 		},
 		first:function() {
-			if (gbox.objectIsVisible(this)){
-				toys.platformer.applyGravity(this,maze,"map");
-				toys.platformer.handleAccellerations(this);
-				toys.platformer.setFrame(this); 
-				var hero=gbox.getObject("player","hero");
-				if (gbox.collides(this,hero)) { 
-					gbox.hitAudio("bonus"); 
-					maingame.hud.pushValue("bonus","value",this.frame);
-					toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"open blue doors",keep:20}); 
-					gbox.trashObject(this); 
-					hero.jumpaccy = 8;
-				} 
-			}
+			handleBonusObject(this, "bluekey");
 		},
-
 		blit:function() {
-			if (gbox.objectIsVisible(this)){
-					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-				}
-			this.xcam = this.x - gbox.getCamera().x;
-			this.ycam = this.y - gbox.getCamera().y;
+			blitBonusObject(this);
 		}
 	 });
-
 
 gbox.addObject({
 		id:"shoe",
@@ -103,10 +62,7 @@ gbox.addObject({
 			toys.platformer.initialize(this,{
 							frames:{
 								still:{ speed:1, frames:[2] },
-								walking:{ speed:4, frames:[2] },
-								jumping:{ speed:1, frames:[2] },
 								falling:{ speed:1, frames:[2] },
-								die: { speed:1,frames:[2] }
 							},
 							x:tileXPos(124),
 							y:tileYPos(36),
@@ -117,27 +73,10 @@ gbox.addObject({
 						});
 		},
 		first:function() {
-			if (gbox.objectIsVisible(this)){
-				toys.platformer.applyGravity(this,maze,"map");
-				toys.platformer.handleAccellerations(this);
-				toys.platformer.setFrame(this);
-				var hero=gbox.getObject("player","hero");
-				if (gbox.collides(this,hero)) {
-					gbox.hitAudio("bonus");
-					maingame.hud.pushValue("bonus","value",this.frame);
-					toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Higher jumps",keep:20});
-					gbox.trashObject(this);
-					hero.jumpaccy = 8;
-				} 
-			}
+			handleBonusObject(this, "shoe");
 		},
-
 		blit:function() {
-			if (gbox.objectIsVisible(this)){
-					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-				}
-			this.xcam = this.x - gbox.getCamera().x;
-			this.ycam = this.y - gbox.getCamera().y;
+			blitBonusObject(this);
 		}
 	 });
 
@@ -150,10 +89,7 @@ gbox.addObject({
 			toys.platformer.initialize(this,{
 							frames:{
 								still:{ speed:1, frames:[1] },
-								walking:{ speed:4, frames:[1] },
-								jumping:{ speed:1, frames:[1] },
 								falling:{ speed:1, frames:[1] },
-								die: { speed:1,frames:[1] }
 							},
 							x:tileXPos(8),
 							y:tileYPos(10),
@@ -164,29 +100,44 @@ gbox.addObject({
 						});
 		},
 		first:function() {
-			if (gbox.objectIsVisible(this)){
-
-
-				toys.platformer.applyGravity(this,maze,"map"); // Apply gravity
-				toys.platformer.handleAccellerations(this); // gravity/attrito
-				toys.platformer.setFrame(this); // set the right animation frame
-				var hero=gbox.getObject("player","hero"); // ... checking where hero is.
-				if (gbox.collides(this,hero)) { // If is colliding with the bonus...
-					gbox.hitAudio("bonus"); // Play the bonus sound...
-					hero.weapon = "gun";
-					maingame.hud.pushValue("bonus","value",this.frame); // Add the bonus image to the bonus queue (the pile on the bottom of the screen)
-					toys.generate.sparks.popupText(this,"sparks",null,{font:"small",jump:5,text:"Shoot with x",keep:150}); // Our nice "text spark" with the earned score...
-					gbox.trashObject(this); // ...and self-destroy.
-				} 
-			}
+			handleBonusObject(this, "gun");
 		},
-
 		blit:function() {
-			if (gbox.objectIsVisible(this)){
-					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.xcam,dy:this.ycam,fliph:this.side,flipv:this.flipv,alpha:1});
-				}
-			this.xcam = this.x - gbox.getCamera().x;
-			this.ycam = this.y - gbox.getCamera().y;
+			blitBonusObject(this);
 		}
 	 });
+}
+
+function handleBonusObject(theBonusObject, theBonusObjectName){
+	if (gbox.objectIsVisible(theBonusObject)){
+		toys.platformer.applyGravity(theBonusObject,maze,"map"); 
+		toys.platformer.handleAccellerations(theBonusObject); 
+		toys.platformer.setFrame(theBonusObject); 
+		var hero=gbox.getObject("player","hero"); 
+		if (gbox.collides(theBonusObject,hero)) { 
+			gbox.hitAudio("bonus");
+			maingame.hud.pushValue("bonus","value",theBonusObject.frame); 
+			if (theBonusObjectName == "gun"){
+				toys.generate.sparks.popupText(theBonusObject,"sparks",null,{font:"small",jump:5,text:"Shoot with x",keep:150});
+				hero.weapon = "gun";
+			}else if (theBonusObjectName == "shoe"){
+				toys.generate.sparks.popupText(theBonusObject,"sparks",null,{font:"small",jump:5,text:"Higher jumps",keep:20});
+				hero.jumpaccy = 8;
+			}else if(theBonusObjectName == "bluekey"){
+				toys.generate.sparks.popupText(theBonusObject,"sparks",null,{font:"small",jump:5,text:"Open blue doors",keep:20}); 
+			}else if(theBonusObjectName == "sword"){
+				hero.weapon = "sword";
+				toys.generate.sparks.popupText(theBonusObject,"sparks",null,{font:"small",jump:5,text:"Swing sword with x",keep:150});
+			}
+			gbox.trashObject(theBonusObject);
+		} 
+	}
+}
+
+function blitBonusObject(theBonusObject){
+	if (gbox.objectIsVisible(theBonusObject)){
+			gbox.blitTile(gbox.getBufferContext(),{tileset:theBonusObject.tileset,tile:theBonusObject.frame,dx:theBonusObject.xcam,dy:theBonusObject.ycam,fliph:theBonusObject.side,flipv:theBonusObject.flipv,alpha:1});
+	}		
+	theBonusObject.xcam = theBonusObject.x - gbox.getCamera().x;
+	theBonusObject.ycam = theBonusObject.y - gbox.getCamera().y;
 }

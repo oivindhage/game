@@ -4,7 +4,6 @@ function addHero(){
 		group:"player",
 		tileset:"hero",
 		killed:false, 
-		
 		initialize:function() { // The "initialize" method is called the first frame the object spawns and never more.
 			toys.platformer.initialize(this, {
 					frames:{
