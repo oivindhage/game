@@ -47,6 +47,7 @@ function handleObstacleObject(theObstacleObject, theObstacleObjectName){
 //            }
             key_ix = maingame.hud.w.bonus.value.indexOf(4);
             if (key_ix != -1) {
+                gbox.hitAudio("door");
                 maingame.hud.w.bonus.value.splice(key_ix, 1);
                 maingame.hud.redraw();
                 gbox.trashObject(theObstacleObject);

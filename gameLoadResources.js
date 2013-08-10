@@ -31,5 +31,6 @@ gbox.onLoad(function () {
 	gbox.addAudio("default-menu-confirm",[audioserver+"start.mp3",audioserver+"start.ogg"],{channel:"sfx"});
 	gbox.addAudio("ingame",[audioserver+"ingame.mp3",audioserver+"ingame.ogg"],{channel:"bgmusic",loop:true});
 	gbox.addAudio("intro",[audioserver+"Intro.mp3",audioserver+"Intro.ogg"],{channel:"bgmusic",loop:true});
+    gbox.addAudio("door", [audioserver+"door-lock-1.mp3", audioserver+"door-lock-1.ogg"], {channel:"sfx"})
 	gbox.loadAll(go); // When everything is ready, the "loadAll" downloads all the needed resources and runs the "go" function when it's done loading.
 }, false);
