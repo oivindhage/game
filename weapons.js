@@ -6,12 +6,12 @@ function swingSword(){
 		frame:0, 
 		initialize:function() {
 			toys.platformer.initialize(this,{
-							frames:{
-								jumping:{ speed:1, frames:[0,0,1,1,1,1,1,1] },
-							},
-							x:tileXPos(21) + 6,
-							y:tileYPos(22) + 6
-						});
+				frames:{
+					jumping:{ speed:1, frames:[0,0,1,1,1,1,1,1] },
+				},
+				x:tileXPos(21) + 6,
+				y:tileYPos(22) + 6
+			});
 		},
 		first:function() {
 			this.counter=(this.counter+1)%10;
@@ -33,7 +33,7 @@ function swingSword(){
 			this.x = pl.x + diff;
 			if (gbox.objectIsVisible(this)){
 					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x- gbox.getCamera().x,dy:this.y - gbox.getCamera().y,fliph:pl.fliph,flipv:this.flipv,alpha:1});
-				}
+			}
 		}
 	 });
 }
@@ -52,16 +52,16 @@ function fireGun(){
 				theDir = 4;
 			}
 			toys.platformer.initialize(this,{
-							frames:{
-								jumping:{ speed:1, frames:[0] },
-							},
-							x:pl.x + theDiff,
-							y:pl.y + 3,
-							diff:theDiff,
-							dir: theDir,
-							fliph: pl.fliph,
-							flipv: false,
-						});
+				frames:{
+					jumping:{ speed:1, frames:[0] },
+				},
+				x:pl.x + theDiff,
+				y:pl.y + 3,
+				diff:theDiff,
+				dir: theDir,
+				fliph: pl.fliph,
+				flipv: false,
+			});
 		},
 		first:function() {
 			this.counter=(this.counter+1);
