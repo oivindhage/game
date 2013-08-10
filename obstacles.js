@@ -10,10 +10,10 @@ function addObstacles(){
 								still:{ speed:1, frames:[4] },
 								falling:{ speed:1, frames:[4] },
 							},
-							x:tileXPos(134),
-							y:tileYPos(58),
-							xcam:tileXPos(134),
-							ycam:tileYPos(58),
+							x:tileXPos(22),
+							y:tileYPos(13),
+							xcam:tileXPos(22),
+							ycam:tileYPos(13),
 							jumpaccy:0,
 							side:1
 						});
