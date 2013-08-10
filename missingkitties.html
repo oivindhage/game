@@ -167,20 +167,18 @@ maingame.initializeGame=function() {
   
  // And now let's do something not related with ghosts, heros, pills and mazes. Usually random things and hidden countings happens during the gameplay
  maingame.gameEvents=function() { 
-  }
+}
  
 toys.platformer.attackKeys = function(th, key){
-			if (gbox.keyIsHit(key.attack)){
-				var pl=gbox.getObject("player","hero");
-				if (pl.weapon == "sword"){
-					swingSword();
-				} else if (pl.weapon == "gun"){
-					fireGun();
-				}
-			}
+	if (gbox.keyIsHit(key.attack)){
+		var pl=gbox.getObject("player","hero");
+		if (pl.weapon == "sword"){
+			swingSword();
+		} else if (pl.weapon == "gun"){
+			fireGun();
 		}
-
-
+	}
+}
   gbox.go();
 }
 	</script>
