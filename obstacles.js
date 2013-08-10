@@ -3,12 +3,12 @@ function addObstacles(){
 		id:"bluedoor",
 		group:"obstacles",
 		tileset:"obstacles",
-		frame:0, 
+		frame:1, 
 		initialize:function() {
 			toys.platformer.initialize(this,{
 							frames:{
-								still:{ speed:1, frames:[0] },
-								falling:{ speed:1, frames:[0] },
+								still:{ speed:1, frames:[1] },
+								falling:{ speed:1, frames:[1] },
 							},
 							x:tileXPos(22),
 							y:tileYPos(13),
@@ -43,8 +43,16 @@ function handleObstacleObject(theObstacleObject, theObstacleObjectName){
 //			gbox.hitAudio("bonus");
 //			maingame.hud.pushValue("bonus","value",theBonusObject.frame);
 //			if (theBonusObjectName == "bluedoor" && hero.hasItem("bluekey")){
-//                gbox.trashObject(theBonusObject);
+//                gbox.trashObject(theObstacleObject);
 //            }
+            key_ix = maingame.hud.w.bonus.value.indexOf(4);
+            if (key_ix != -1) {
+                maingame.hud.w.bonus.value.splice(key_ix, 1);
+                maingame.hud.redraw();
+                gbox.trashObject(theObstacleObject);
+            } else {
+                hero.x = tileXPos(23);
+            }
 		}
 	}
 }

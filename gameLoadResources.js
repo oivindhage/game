@@ -19,7 +19,7 @@ gbox.onLoad(function () {
 	gbox.addTiles({id:"sword",    image:"cels",tileh:12,tilew:12,tilerow:2, gapx:0, gapy:52});
 	gbox.addTiles({id:"swing",    image:"cels",tileh:9, tilew:12,tilerow:2, gapx:0, gapy:52});
 	gbox.addTiles({id:"shot",     image:"cels",tileh:4, tilew:6, tilerow:1, gapx:25,gapy:52});
-	gbox.addTiles({id:"obstacles",image:"cels",tileh:16,tilew:16,tilerow:1, gapx:0, gapy:64});
+	gbox.addTiles({id:"obstacles",image:"cels",tileh:16,tilew:16,tilerow:3, gapx:0, gapy:64});
 
 	var audioserver="resources/audio/";
 	gbox.addAudio("eat",[audioserver+"eat.mp3",audioserver+"eat.ogg"],{channel:"sfx"});
