@@ -16,13 +16,13 @@
 	<script type="text/javascript" src="weapons.js"></script>
 	<script type="text/javascript" src="obstacles.js"></script>
 	<style>BODY { -webkit-user-select:none; margin:0px}</style>
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 </head>
 <body>
 <script>
 
 function go() {
- 	gbox.setGroups(["background","player","weapon","ghosts","bonus","sparks","gamecycle"]); 
+ 	gbox.setGroups(["background","player","weapon","ghosts","bonus","sparks","gamecycle","obstacles"]); 
  	gbox.setAudioChannels({bgmusic:{volume:0.8},sfx:{volume:1.0}});
  	maingame=gamecycle.createMaingame("gamecycle","gamecycle"); // a new maingame into the "gamecycle" group, "override" some maingame default actions.
  	

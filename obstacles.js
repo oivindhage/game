@@ -1,19 +1,25 @@
 function addObstacles(){
 	gbox.addObject({
-		id:"bluedoor"
-		group:"obstacle",
-		tileset:"obstacle",
-		frame:4, 
+		id:"bluedoor",
+		group:"obstacles",
+		tileset:"obstacles",
+		frame:0, 
 		initialize:function() {
 			toys.platformer.initialize(this,{
 							frames:{
-								still:{ speed:1, frames:[4] },
-								falling:{ speed:1, frames:[4] },
+								still:{ speed:1, frames:[0] },
+								falling:{ speed:1, frames:[0] },
 							},
 							x:tileXPos(22),
 							y:tileYPos(13),
 							xcam:tileXPos(22),
 							ycam:tileYPos(13),
+                            
+                            // x:tileXPos(20),
+							// y:tileYPos(21),
+							// xcam:tileXPos(20),
+							// ycam:tileYPos(21),
+                            
 							jumpaccy:0,
 							side:1
 						});
@@ -29,11 +35,11 @@ function addObstacles(){
 
 function handleObstacleObject(theObstacleObject, theObstacleObjectName){
 	if (gbox.objectIsVisible(theObstacleObject)){
-//		toys.platformer.applyGravity(theObstacleObject,maze,"map"); 
-//		toys.platformer.handleAccellerations(theObstacleObject); 
+		toys.platformer.applyGravity(theObstacleObject,maze,"map"); 
+		toys.platformer.handleAccellerations(theObstacleObject); 
 		toys.platformer.setFrame(theObstacleObject); 
 		var hero=gbox.getObject("player","hero"); 
-		if (gbox.collides(theBonusObject,hero)) { 
+		if (gbox.collides(theObstacleObject,hero)) { 
 //			gbox.hitAudio("bonus");
 //			maingame.hud.pushValue("bonus","value",theBonusObject.frame);
 //			if (theBonusObjectName == "bluedoor" && hero.hasItem("bluekey")){
