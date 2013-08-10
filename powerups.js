@@ -97,9 +97,9 @@ gbox.addObject({
 							// ycam:tileYPos(10),
 							
 							
-							x:tileXPos(25) + 6,
+							x:tileXPos(29) + 6,
 							y:tileYPos(22) + 6,
-							xcam:tileXPos(25) + 6,
+							xcam:tileXPos(29) + 6,
 							ycam:tileYPos(22) + 6,
 							
 							

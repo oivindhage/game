@@ -1,6 +1,6 @@
 function swingSword(){
 	gbox.addObject({
-		id:"weapon",
+		id:"swordswing",
 		group:"weapon",
 		tileset:"swing",
 		frame:0, 
@@ -39,7 +39,11 @@ function swingSword(){
 }
 
 function fireGun(){
+	if (gbox.getObject("weapon","shot")){
+		return;
+	}
 	gbox.addObject({
+		id:"shot",
 		group:"weapon",
 		tileset:"shot",
 		frame:0, 
@@ -77,8 +81,8 @@ function fireGun(){
 		blit:function() {
 			this.x += this.dir;
 			if (gbox.objectIsVisible(this)){
-					gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x- gbox.getCamera().x,dy:this.y - gbox.getCamera().y,fliph:this.fliph,flipv:this.flipv,alpha:1});
-				}
+				gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x- gbox.getCamera().x,dy:this.y - gbox.getCamera().y,fliph:this.fliph,flipv:this.flipv,alpha:1});
+			}
 		}
 	 });
 }

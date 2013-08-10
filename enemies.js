@@ -45,8 +45,17 @@ function addEnemies(){
 					--this.attackedTimer;
 				}else{
 					this.frames.walking.frames = [0,1];
-					var weapon = gbox.getObject("weapon", "weapon");
+					var weapon = gbox.getObject("weapon", "swordswing");
 					if (weapon != undefined && gbox.collides(this, weapon, 2)){
+						--this.life;
+						this.attackedTimer = 30;
+						if (this.life<=0){
+							gbox.hitAudio("bonus");
+							gbox.trashObject(this);
+						}
+					}
+					var shot = gbox.getObject("weapon", "shot");
+					if (shot != undefined && gbox.collides(this, shot, 2)){
 						--this.life;
 						this.attackedTimer = 30;
 						if (this.life<=0){
