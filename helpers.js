@@ -33,9 +33,9 @@ function followCamera(obj,viewdata) {
             playerViewDistanceToEdge = gbox._screenw - (obj.x - cam.x);
             flip = -1;
         }
-        if (playerViewDistanceToEdge < (gbox._screenw / 2) * 2) {
+        if (playerViewDistanceToEdge < (gbox._screenw / 3) * 2) {
         
-            gbox.setCameraX(cam.x - (flip * 3), viewdata);
+            gbox.setCameraX(cam.x - (flip * 2), viewdata);
         
         }
     } catch(err) {
