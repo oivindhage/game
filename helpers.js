@@ -15,14 +15,28 @@ function followCamera(obj,viewdata) {
 	var buf = {x:96, y:96};
 	var cam = gbox.getCamera();
 	
+    var playerViewDistanceToEdge;
+    var flip;
+    
 	if ((obj.x - cam.x) > (gbox._screenw - buf.x)) gbox.setCameraX(cam.x + (obj.x - cam.x) - (gbox._screenw - buf.x), viewdata);
 	if ((obj.x - cam.x) < (buf.x))                 gbox.setCameraX(cam.x + (obj.x - cam.x) - buf.x,                   viewdata);
 	if ((obj.y - cam.y) > (gbox._screenh - buf.y)) gbox.setCameraY(cam.y + (obj.y - cam.y) - (gbox._screenh - buf.y), viewdata);
 	if ((obj.y - cam.y) < (buf.y))                 gbox.setCameraY(cam.y + (obj.y - cam.y) - buf.y,                   viewdata);
     
     try {
-        if (obj.fliph) {
-            //...
+        if (obj.fliph === 1) {
+            // looking left
+            playerViewDistanceToEdge = obj.x - cam.x;
+            flip = 1;
+        } else {
+            // looking right
+            playerViewDistanceToEdge = gbox._screenw - (obj.x - cam.x);
+            flip = -1;
+        }
+        if (playerViewDistanceToEdge < (gbox._screenw / 2) * 2) {
+        
+            gbox.setCameraX(cam.x - (flip * 3), viewdata);
+        
         }
     } catch(err) {
         alert(err);

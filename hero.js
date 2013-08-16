@@ -15,7 +15,7 @@ function addHero(){
 					},
 					responsive:14,
 					accx:0,
-					fliph:toys.FACE_LEFT,
+					fliph:1,
 					weapon:"none"
 
 			});
