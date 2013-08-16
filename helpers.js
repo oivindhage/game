@@ -12,12 +12,33 @@ function tileYPos(y){
 
   
 function followCamera(obj,viewdata) {
-	xbuf = 96;
-	ybuf = 96;
-	xcam = gbox.getCamera().x;
-	ycam = gbox.getCamera().y;
-	if ((obj.x - xcam) > (gbox._screenw - xbuf)) gbox.setCameraX(xcam + (obj.x - xcam) - (gbox._screenw - xbuf), viewdata);
-	if ((obj.x - xcam) < (xbuf))                 gbox.setCameraX(xcam + (obj.x - xcam) - xbuf,                   viewdata);
-	if ((obj.y - ycam) > (gbox._screenh - ybuf)) gbox.setCameraY(ycam + (obj.y - ycam) - (gbox._screenh - ybuf), viewdata);
-	if ((obj.y - ycam) < (ybuf))                 gbox.setCameraY(ycam + (obj.y - ycam) - ybuf,                   viewdata);
+	var buf = {x:96, y:96};
+	var cam = gbox.getCamera();
+	
+    var playerViewDistanceToEdge;
+    var flip;
+    
+	if ((obj.x - cam.x) > (gbox._screenw - buf.x)) gbox.setCameraX(cam.x + (obj.x - cam.x) - (gbox._screenw - buf.x), viewdata);
+	if ((obj.x - cam.x) < (buf.x))                 gbox.setCameraX(cam.x + (obj.x - cam.x) - buf.x,                   viewdata);
+	if ((obj.y - cam.y) > (gbox._screenh - buf.y)) gbox.setCameraY(cam.y + (obj.y - cam.y) - (gbox._screenh - buf.y), viewdata);
+	if ((obj.y - cam.y) < (buf.y))                 gbox.setCameraY(cam.y + (obj.y - cam.y) - buf.y,                   viewdata);
+    
+    try {
+        if (obj.fliph === 1) {
+            // looking left
+            playerViewDistanceToEdge = obj.x - cam.x;
+            flip = 1;
+        } else {
+            // looking right
+            playerViewDistanceToEdge = gbox._screenw - (obj.x - cam.x);
+            flip = -1;
+        }
+        if (playerViewDistanceToEdge < (gbox._screenw / 3) * 2) {
+        
+            gbox.setCameraX(cam.x - (flip * 2), viewdata);
+        
+        }
+    } catch(err) {
+        alert(err);
+    }
 }
